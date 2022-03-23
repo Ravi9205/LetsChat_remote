@@ -8,22 +8,132 @@
 import UIKit
 
 class LoginVC: UIViewController {
-
+    
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.clipsToBounds = true
+        return scrollView
+        
+    }()
+    
+    private let imageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named:"Logo")
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+        
+    }()
+    
+    
+    private let emailField:UITextField = {
+        let textField = UITextField()
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        textField.returnKeyType = .continue
+        textField.layer.cornerRadius = 10
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.placeholder = "Enter Email address.... "
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        textField.leftViewMode = .always
+        textField.backgroundColor = .white
+        return textField
+        
+    }()
+    
+    
+    private let passwordField:UITextField = {
+        let textField = UITextField()
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        textField.returnKeyType = .done
+        textField.layer.cornerRadius = 10
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.placeholder = "Enter Password .... "
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        textField.leftViewMode = .always
+        textField.isSecureTextEntry = true
+        textField.backgroundColor = .white
+        return textField
+        
+    }()
+    
+    
+    private let loginButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("Login", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = .link
+        button.layer.cornerRadius = 10
+        button.layer.masksToBounds = true
+        button.titleLabel?.font = .systemFont(ofSize: 20,weight:.bold)
+        return button
+        
+    }()
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        self.title = "Login"
+        self.view.backgroundColor = .white
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Register"
+                                                                 , style: .done,
+                                                                 target: self,
+                                                                 action: #selector(registerTapped))
+        
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(imageView)
+        scrollView.addSubview(emailField)
+        scrollView.addSubview(passwordField)
+        scrollView.addSubview(loginButton)
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        scrollView.frame = view.bounds
+        let size = scrollView.width/3
+        
+        imageView.frame = CGRect(x: (scrollView.width-size)/2,
+                                 y: 50,
+                                 width: size,
+                                 height: size)
+        
+        emailField.frame = CGRect(x: 30,
+                                  y: imageView.bottom+50,
+                                  width: scrollView.width-60,
+                                 height: 52)
+        
+        passwordField.frame = CGRect(x: 30,
+                                  y: emailField.bottom+20,
+                                  width: scrollView.width-60,
+                                 height: 52)
+        
+        
+        loginButton.frame = CGRect(x: 30,
+                                  y: passwordField.bottom+20,
+                                  width: scrollView.width-60,
+                                 height: 52)
+        
+        
+        
+        
+        
+        
     }
-    */
+    
+    
+    
+   
+    @objc func registerTapped(){
+       let vc = RegisterVC()
+       vc.title = "Create Account"
+       navigationController?.pushViewController(vc, animated: true)
+       
+   }
+    
 
 }

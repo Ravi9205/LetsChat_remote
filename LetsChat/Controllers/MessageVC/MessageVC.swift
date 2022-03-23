@@ -8,22 +8,43 @@
 import UIKit
 
 class MessageVC: UIViewController {
-
+    
     @IBOutlet weak var tablView:UITableView!
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
+        
         self.tablView.delegate = self
         self.tablView.dataSource = self
         self.tablView.register(UITableViewCell.self, forCellReuseIdentifier:"cell")
         
+        
+        
     }
     
-
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let isLoggedIn = UserDefaults.standard.string(forKey: "loggedIn")
+        
+        if (isLoggedIn == nil) {
+            let login = LoginVC()
+            let nav = UINavigationController(rootViewController: login)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: false)
+        }
+        else
+        {
+            let message = MessageVC()
+            let nav = UINavigationController(rootViewController: message)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: false)
+        }
+    }
 }
 
 extension MessageVC: UITableViewDelegate, UITableViewDataSource{
