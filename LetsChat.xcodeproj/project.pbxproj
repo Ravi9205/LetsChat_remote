@@ -21,6 +21,7 @@
 		B30764BE27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30764BD27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift */; };
 		B38305B427EB262C00D569EF /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38305B327EB262C00D569EF /* LoginVC.swift */; };
 		B38305B727EB265800D569EF /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38305B627EB265800D569EF /* RegisterVC.swift */; };
+		B38305BA27EB9C9400D569EF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38305B927EB9C9400D569EF /* Extensions.swift */; };
 		C763BDA8EB5C9610E5A23159 /* Pods_LetsChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402D6FF7BD0AB187E8AF7EB8 /* Pods_LetsChat.framework */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,7 @@
 		B30764BD27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetsChatUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B38305B327EB262C00D569EF /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		B38305B627EB265800D569EF /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
+		B38305B927EB9C9400D569EF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BA6EA05916AFBF4915787FC8 /* Pods-LetsChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LetsChat.release.xcconfig"; path = "Target Support Files/Pods-LetsChat/Pods-LetsChat.release.xcconfig"; sourceTree = "<group>"; };
 		DA8CB281D5A89E32D197BEDA /* Pods-LetsChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LetsChat.debug.xcconfig"; path = "Target Support Files/Pods-LetsChat/Pods-LetsChat.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,6 +160,7 @@
 		B307649927E9E18A004F8742 /* LetsChat */ = {
 			isa = PBXGroup;
 			children = (
+				B38305B827EB9C7D00D569EF /* Extensions */,
 				B38305B127EB25DC00D569EF /* Controllers */,
 				B38305B027EB243400D569EF /* Resources */,
 				B38305AF27EB240800D569EF /* Views */,
@@ -236,6 +239,14 @@
 				B38305B627EB265800D569EF /* RegisterVC.swift */,
 			);
 			path = RegisterVC;
+			sourceTree = "<group>";
+		};
+		B38305B827EB9C7D00D569EF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B38305B927EB9C9400D569EF /* Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -414,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B307649B27E9E18A004F8742 /* AppDelegate.swift in Sources */,
+				B38305BA27EB9C9400D569EF /* Extensions.swift in Sources */,
 				B38305B727EB265800D569EF /* RegisterVC.swift in Sources */,
 				B301D5C327E9E72200BBE3E1 /* MessageVC.swift in Sources */,
 				B38305B427EB262C00D569EF /* LoginVC.swift in Sources */,
