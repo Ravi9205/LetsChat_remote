@@ -20,4 +20,6 @@ struct Message: MessageType
     var kind: MessageKind
     
     
+    
+    
 }
