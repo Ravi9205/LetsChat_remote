@@ -89,6 +89,10 @@ class LoginVC: UIViewController {
         scrollView.addSubview(passwordField)
         scrollView.addSubview(loginButton)
         
+        emailField.delegate = self
+        passwordField.delegate = self
+        
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
     
     override func viewDidLayoutSubviews() {
@@ -126,6 +130,26 @@ class LoginVC: UIViewController {
     }
     
     
+    @objc func loginButtonTapped() {
+        
+        emailField.resignFirstResponder()
+        passwordField.resignFirstResponder()
+        
+        guard let email = emailField.text , let password = passwordField.text , !email.isEmpty , !password.isEmpty, password.count >= 6 else {
+            alertUserLoginError()
+            return
+        }
+        
+        // Firebase login
+        
+    }
+    
+    func alertUserLoginError(){
+        let alert = UIAlertController(title:"Woops", message:"Please enter all information to login", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title:"Dismiss", style: .cancel, handler: nil))
+        present(alert, animated: true)
+    }
+    
     
    
     @objc func registerTapped(){
@@ -134,6 +158,18 @@ class LoginVC: UIViewController {
        navigationController?.pushViewController(vc, animated: true)
        
    }
-    
+}
 
+extension LoginVC:UITextFieldDelegate
+{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == emailField {
+            passwordField.becomeFirstResponder()
+        }
+        else if textField == passwordField{
+            loginButtonTapped()
+        }
+        
+        return true
+    }
 }
