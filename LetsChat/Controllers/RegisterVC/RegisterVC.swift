@@ -12,6 +12,7 @@ class RegisterVC: UIViewController {
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.clipsToBounds = true
+        scrollView.isUserInteractionEnabled = true
         return scrollView
         
     }()
@@ -20,6 +21,7 @@ class RegisterVC: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named:"User")
         imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = true
         return imageView
         
     }()
@@ -57,6 +59,21 @@ class RegisterVC: UIViewController {
         
     }()
     
+    private let emailField:UITextField = {
+        let textField = UITextField()
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        textField.returnKeyType = .continue
+        textField.layer.cornerRadius = 10
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.placeholder = "Enter Email Address.... "
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        textField.leftViewMode = .always
+        textField.backgroundColor = .white
+        return textField
+        
+    }()
     
     
     private let passwordField:UITextField = {
@@ -97,6 +114,7 @@ class RegisterVC: UIViewController {
         
         firstNameField.delegate = self
         lastNameField.delegate = self
+        emailField.delegate = self
         passwordField.delegate = self
         
         
@@ -104,6 +122,7 @@ class RegisterVC: UIViewController {
         scrollView.addSubview(imageView)
         scrollView.addSubview(firstNameField)
         scrollView.addSubview(lastNameField)
+        scrollView.addSubview(emailField)
         
         scrollView.addSubview(passwordField)
         scrollView.addSubview(registerButton)
@@ -113,13 +132,11 @@ class RegisterVC: UIViewController {
         gesture.numberOfTapsRequired = 1
         imageView.addGestureRecognizer(gesture)
         
-        imageView.isUserInteractionEnabled = true
-        scrollView.isUserInteractionEnabled = true
-        
        
         registerButton.addTarget(self, action: #selector(registerUserButtonTapped), for: .touchUpInside)
     }
     
+   
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -141,8 +158,13 @@ class RegisterVC: UIViewController {
                                      width: scrollView.width-60,
                                      height: 52)
         
-        passwordField.frame = CGRect(x: 30,
+        emailField.frame = CGRect(x: 30,
                                      y: lastNameField.bottom+20,
+                                     width: scrollView.width-60,
+                                     height: 52)
+        
+        passwordField.frame = CGRect(x: 30,
+                                     y: emailField.bottom+20,
                                      width: scrollView.width-60,
                                      height: 52)
         
@@ -159,9 +181,11 @@ class RegisterVC: UIViewController {
         
         firstNameField.resignFirstResponder()
         lastNameField.resignFirstResponder()
+        emailField.resignFirstResponder()
         passwordField.resignFirstResponder()
         
-        guard let email = firstNameField.text ,let lastNameField = lastNameField.text, let password = passwordField.text , !email.isEmpty, !lastNameField.isEmpty , !password.isEmpty, password.count >= 6 else {
+        
+        guard let firstName = firstNameField.text ,let lastNameField = lastNameField.text, let email = emailField.text,let password = passwordField.text , !firstName.isEmpty, !lastNameField.isEmpty ,!email.isEmpty, !password.isEmpty, password.count >= 6 else {
             alertUserSignUpError()
             return
         }
@@ -193,6 +217,11 @@ extension RegisterVC:UITextFieldDelegate
         {
             passwordField.becomeFirstResponder()
         }
+        else if textField == emailField
+        {
+            emailField.becomeFirstResponder()
+        }
+        
         else if textField == passwordField{
             registerUserButtonTapped()
         }
