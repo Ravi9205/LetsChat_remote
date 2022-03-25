@@ -19,6 +19,7 @@
 		B30764B227E9E191004F8742 /* LetsChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30764B127E9E191004F8742 /* LetsChatTests.swift */; };
 		B30764BC27E9E191004F8742 /* LetsChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30764BB27E9E191004F8742 /* LetsChatUITests.swift */; };
 		B30764BE27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30764BD27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift */; };
+		B3757AD327EDB26300E71C73 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3757AD227EDB26300E71C73 /* GoogleService-Info.plist */; };
 		B38305B427EB262C00D569EF /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38305B327EB262C00D569EF /* LoginVC.swift */; };
 		B38305B727EB265800D569EF /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38305B627EB265800D569EF /* RegisterVC.swift */; };
 		B38305BA27EB9C9400D569EF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38305B927EB9C9400D569EF /* Extensions.swift */; };
@@ -60,6 +61,7 @@
 		B30764B727E9E191004F8742 /* LetsChatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LetsChatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B30764BB27E9E191004F8742 /* LetsChatUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetsChatUITests.swift; sourceTree = "<group>"; };
 		B30764BD27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetsChatUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B3757AD227EDB26300E71C73 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B38305B327EB262C00D569EF /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		B38305B627EB265800D569EF /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		B38305B927EB9C9400D569EF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 		B307649927E9E18A004F8742 /* LetsChat */ = {
 			isa = PBXGroup;
 			children = (
+				B3757AD227EDB26300E71C73 /* GoogleService-Info.plist */,
 				B38305B827EB9C7D00D569EF /* Extensions */,
 				B38305B127EB25DC00D569EF /* Controllers */,
 				B38305B027EB243400D569EF /* Resources */,
@@ -356,6 +359,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B30764A727E9E191004F8742 /* LaunchScreen.storyboard in Resources */,
+				B3757AD327EDB26300E71C73 /* GoogleService-Info.plist in Resources */,
 				B30764A427E9E191004F8742 /* Assets.xcassets in Resources */,
 				B30764A227E9E18A004F8742 /* Main.storyboard in Resources */,
 			);
@@ -624,7 +628,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = makemycoolApp.LetsChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.makemycoolApp.LetsChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -652,7 +656,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = makemycoolApp.LetsChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.makemycoolApp.LetsChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

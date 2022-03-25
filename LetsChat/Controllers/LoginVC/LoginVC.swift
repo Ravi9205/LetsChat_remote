@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LoginVC: UIViewController {
     
@@ -141,6 +142,17 @@ class LoginVC: UIViewController {
         }
         
         // Firebase login
+        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            
+            guard let result = authResult, error == nil else {
+                print("Error while login")
+                return
+            }
+            
+            let user = result.user
+            print("userInfo==\(String(describing: user.displayName))")
+            
+        }
         
     }
     
