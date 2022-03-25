@@ -22,6 +22,9 @@ class RegisterVC: UIViewController {
         imageView.image = UIImage(named:"User")
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 2
+        imageView.layer.borderColor = UIColor.lightGray.cgColor
         return imageView
         
     }()
@@ -132,11 +135,11 @@ class RegisterVC: UIViewController {
         gesture.numberOfTapsRequired = 1
         imageView.addGestureRecognizer(gesture)
         
-       
+        
         registerButton.addTarget(self, action: #selector(registerUserButtonTapped), for: .touchUpInside)
     }
     
-   
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -147,6 +150,7 @@ class RegisterVC: UIViewController {
                                  y: 50,
                                  width: size,
                                  height: size)
+        imageView.layer.cornerRadius = imageView.width/2.0
         
         firstNameField.frame = CGRect(x: 30,
                                       y: imageView.bottom+50,
@@ -159,9 +163,9 @@ class RegisterVC: UIViewController {
                                      height: 52)
         
         emailField.frame = CGRect(x: 30,
-                                     y: lastNameField.bottom+20,
-                                     width: scrollView.width-60,
-                                     height: 52)
+                                  y: lastNameField.bottom+20,
+                                  width: scrollView.width-60,
+                                  height: 52)
         
         passwordField.frame = CGRect(x: 30,
                                      y: emailField.bottom+20,
@@ -184,7 +188,6 @@ class RegisterVC: UIViewController {
         emailField.resignFirstResponder()
         passwordField.resignFirstResponder()
         
-        
         guard let firstName = firstNameField.text ,let lastNameField = lastNameField.text, let email = emailField.text,let password = passwordField.text , !firstName.isEmpty, !lastNameField.isEmpty ,!email.isEmpty, !password.isEmpty, password.count >= 6 else {
             alertUserSignUpError()
             return
@@ -201,11 +204,14 @@ class RegisterVC: UIViewController {
     }
     
     @objc func  openPhotoGallery(){
-        print("Open gallery")
+        //print("Open gallery")
+        presentPhotoActionSheet()
     }
     
     
 }
+
+// MARK:- TextField Delegates
 
 extension RegisterVC:UITextFieldDelegate
 {
@@ -230,5 +236,73 @@ extension RegisterVC:UITextFieldDelegate
     }
 }
 
+
+//MARK:- For Accessing the Media Liabrary
+
+extension RegisterVC:UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func presentPhotoActionSheet(){
+        let actionSheet  = UIAlertController(title:"Profile Picture", message:"How would you like to select a picture !", preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Cancel",
+                                            style: .cancel,
+                                            handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "Take Photo",
+                                            style: .default,
+                                            handler: {[weak self]_ in
+            self?.presentCamera()
+            
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Chose Photo",
+                                            style: .default,
+                                            handler: {[weak self]_ in
+            self?.presentPhotoPicker()
+            
+        }))
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
+    //MARK:- Opening up Camera
+    func presentCamera(){
+        if (UIImagePickerController.isSourceTypeAvailable(.camera)) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .camera
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            present(imagePicker, animated: true)
+            
+        }
+        else
+        {
+            let cameraAlert = UIAlertController(title:"Woops!", message:"Camera not avaiable for this selected device try different one", preferredStyle: .alert)
+            cameraAlert.addAction(UIAlertAction(title:"Dismiss", style: .cancel, handler: nil))
+            self.present(cameraAlert, animated: true)
+            
+        }
+    }
+    
+    //MARK:- Photo Gallery
+    
+    func presentPhotoPicker(){
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true)
+    }
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+        imageView.image = selectedImage
+    }
+    
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
 
 
