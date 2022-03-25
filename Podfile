@@ -6,5 +6,8 @@ target 'LetsChat' do
   use_frameworks!
 
   pod 'MessageKit'
+  pod  'FirebaseCore'
+  pod  'FirebaseAuth'
+  pod  'FirebaseDatabase'
 
 end

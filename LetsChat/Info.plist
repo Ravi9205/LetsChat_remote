@@ -8,9 +8,9 @@
 		<string>Please allow to take picture from the camera</string>
 		<key>Privacy Photo Library Addition</key>
 		<string>Please allow to select picture from the gallery</string>
-		<key>UIApplicationSupportsTabbedSceneCollection</key>
-		<false/>
 		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UIApplicationSupportsTabbedSceneCollection</key>
 		<false/>
 		<key>UISceneConfigurations</key>
 		<dict>
