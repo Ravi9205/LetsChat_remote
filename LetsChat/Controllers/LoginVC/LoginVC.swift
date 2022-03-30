@@ -142,7 +142,10 @@ class LoginVC: UIViewController {
         }
         
         // Firebase login
-        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
+            guard let strongSelf = self else {
+                return
+            }
             
             guard let result = authResult, error == nil else {
                 print("Error while login")
@@ -150,8 +153,9 @@ class LoginVC: UIViewController {
             }
             
             let user = result.user
-            print("userInfo==\(String(describing: user.displayName))")
-            
+            print("userInfo==\(user)")
+            guard let message = strongSelf.storyboard?.instantiateViewController(withIdentifier:"MessageVC") as? MessageVC else {return}
+            strongSelf.navigationController?.pushViewController(message, animated: false)
         }
         
     }

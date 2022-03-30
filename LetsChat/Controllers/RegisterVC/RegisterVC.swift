@@ -20,7 +20,7 @@ class RegisterVC: UIViewController {
     
     private let imageView : UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named:"User")
+        imageView.image = UIImage(named:"person.circle")
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
         imageView.layer.masksToBounds = true
@@ -137,9 +137,13 @@ class RegisterVC: UIViewController {
         imageView.addGestureRecognizer(gesture)
         
         
-        registerButton.addTarget(self, action: #selector(registerUserButtonTapped), for: .touchUpInside)
+        
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        registerButton.addTarget(self, action: #selector(registerUserButtonTapped), for: .touchUpInside)
+    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -190,28 +194,46 @@ class RegisterVC: UIViewController {
         passwordField.resignFirstResponder()
         
         guard let firstName = firstNameField.text ,let lastNameField = lastNameField.text, let email = emailField.text,let password = passwordField.text , !firstName.isEmpty, !lastNameField.isEmpty ,!email.isEmpty, !password.isEmpty, password.count >= 6 else {
-            alertUserSignUpError()
+            alertUserSignUpError(message:"Please enter all information to create a new account")
             return
         }
         
         // Firebase login
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+        
+        DatabaseManager.shared.userExits(with: email) {[weak self] emailExits in
             
-            guard let result = authResult, error == nil else {
-                print("error creating new account\(String(describing: error))")
+            guard let strongSelf = self else {
                 return
             }
             
-            let user = result.user
-            print("Created \(user)")
-            
-            
+            guard !emailExits else {
+                //user Already exits
+                return
+            }
+            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+                
+                guard  authResult != nil, error == nil else {
+                    //print("error creating new account\(String(describing: error))")
+                    strongSelf.alertUserSignUpError(message: String(describing:error))
+                    return
+                }
+                
+                //let user = result.user
+                
+                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastNameField, emailAddress: email))
+                // print("Created \(user)")
+                guard let message = strongSelf.storyboard?.instantiateViewController(withIdentifier:"MessageVC") as? MessageVC else { return}
+                strongSelf.navigationController?.pushViewController(message, animated: false)
+                
+            }
         }
+        
+        
         
     }
     
-    func alertUserSignUpError(){
-        let alert = UIAlertController(title:"Woops", message:"Please enter all information to create a new account", preferredStyle: .alert)
+    func alertUserSignUpError(message:String){
+        let alert = UIAlertController(title:"Woops", message:message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title:"Dismiss", style: .cancel, handler: nil))
         present(alert, animated: true)
     }

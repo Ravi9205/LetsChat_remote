@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MessageVC: UIViewController {
     
@@ -17,34 +18,23 @@ class MessageVC: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
+        self.tablView.register(UITableViewCell.self, forCellReuseIdentifier:"cell")
+
         self.tablView.delegate = self
         self.tablView.dataSource = self
-        self.tablView.register(UITableViewCell.self, forCellReuseIdentifier:"cell")
-        
+        self.navigationItem.setHidesBackButton(true, animated: true)
+
         
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        let isLoggedIn = UserDefaults.standard.string(forKey: "loggedIn")
-        
-        if (isLoggedIn == nil) {
-            let login = LoginVC()
-            let nav = UINavigationController(rootViewController: login)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: false)
-        }
-        else
-        {
-            let message = MessageVC()
-            let nav = UINavigationController(rootViewController: message)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: false)
-        }
+       // validateAuth()
+
     }
+    
+    
 }
 
 extension MessageVC: UITableViewDelegate, UITableViewDataSource{
@@ -71,10 +61,4 @@ extension MessageVC: UITableViewDelegate, UITableViewDataSource{
         self.navigationController?.pushViewController(chat, animated: true)
         // Show Chat Messages
     }
-    
-    
-    
-    
-    
-    
 }
