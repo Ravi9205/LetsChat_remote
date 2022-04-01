@@ -110,18 +110,18 @@ class LoginVC: UIViewController {
         emailField.frame = CGRect(x: 30,
                                   y: imageView.bottom+50,
                                   width: scrollView.width-60,
-                                 height: 52)
+                                  height: 52)
         
         passwordField.frame = CGRect(x: 30,
-                                  y: emailField.bottom+20,
-                                  width: scrollView.width-60,
-                                 height: 52)
+                                     y: emailField.bottom+20,
+                                     width: scrollView.width-60,
+                                     height: 52)
         
         
         loginButton.frame = CGRect(x: 30,
-                                  y: passwordField.bottom+20,
-                                  width: scrollView.width-60,
-                                 height: 52)
+                                   y: passwordField.bottom+20,
+                                   width: scrollView.width-60,
+                                   height: 52)
         
         
         
@@ -137,7 +137,7 @@ class LoginVC: UIViewController {
         passwordField.resignFirstResponder()
         
         guard let email = emailField.text , let password = passwordField.text , !email.isEmpty , !password.isEmpty, password.count >= 6 else {
-            alertUserLoginError()
+            alertUserLoginError(message:"Please enter all information to login")
             return
         }
         
@@ -154,26 +154,28 @@ class LoginVC: UIViewController {
             
             let user = result.user
             print("userInfo==\(user)")
-            guard let message = strongSelf.storyboard?.instantiateViewController(withIdentifier:"MessageVC") as? MessageVC else {return}
-            strongSelf.navigationController?.pushViewController(message, animated: false)
+            let tabbar = strongSelf.storyboard?.instantiateViewController(withIdentifier:"TabbarController")
+            let nav = UINavigationController(rootViewController: tabbar!)
+            nav.modalPresentationStyle = .fullScreen
+            strongSelf.present(nav, animated: false, completion: nil)
         }
         
     }
     
-    func alertUserLoginError(){
-        let alert = UIAlertController(title:"Woops", message:"Please enter all information to login", preferredStyle: .alert)
+    func alertUserLoginError(message:String){
+        let alert = UIAlertController(title:"Woops", message:message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title:"Dismiss", style: .cancel, handler: nil))
         present(alert, animated: true)
     }
     
     
-   
+    
     @objc func registerTapped(){
-       let vc = RegisterVC()
-       vc.title = "Create Account"
-       navigationController?.pushViewController(vc, animated: true)
-       
-   }
+        let vc = RegisterVC()
+        vc.title = "Create Account"
+        navigationController?.pushViewController(vc, animated: true)
+        
+    }
 }
 
 extension LoginVC:UITextFieldDelegate
