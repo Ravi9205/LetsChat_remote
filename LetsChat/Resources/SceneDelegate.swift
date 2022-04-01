@@ -24,13 +24,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
     }
-
+    
     private func validateAuth(){
+        
         let storyBoard = UIStoryboard(name:"Main", bundle: nil)
-        let tabbar = storyBoard.instantiateViewController(withIdentifier:"TabbarController")
-        let nav = UINavigationController(rootViewController: tabbar)
-        //present(nav, animated: false)
-        self.window?.rootViewController = nav
+        
+        if FirebaseAuth.Auth.auth().currentUser == nil {
+            let login = storyBoard.instantiateViewController(withIdentifier:"LoginVC")
+            let nav = UINavigationController(rootViewController: login)
+            self.window?.rootViewController = nav
+        }
+        else {
+            let tabbar = storyBoard.instantiateViewController(withIdentifier:"TabbarController")
+            let nav = UINavigationController(rootViewController: tabbar)
+            self.window?.rootViewController = nav
+            
+        }
         self.window?.makeKeyAndVisible()
     }
     
