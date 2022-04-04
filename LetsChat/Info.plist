@@ -2,6 +2,38 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb451208886797540</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.605058381777-ncgg49keg91smuscr7dudfkkfik3nooh</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
+	<true/>
+	<key>FacebookAppID</key>
+	<string>451208886797540</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>FacebookClientToken</key>
+	<string>60cc7b227260cc77e7c1f28527dd3ce6</string>
+	<key>FacebookDisplayName</key>
+	<string>APP-NAME</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>Privacy Camera  Uses Description</key>
@@ -27,29 +59,5 @@
 			</array>
 		</dict>
 	</dict>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>fbAPP-ID</string>
-			</array>
-		</dict>
-	</array>
-	<key>FacebookAppID</key>
-	<string>APP-ID</string>
-	<key>FacebookClientToken</key>
-	<string>CLIENT-TOKEN</string>
-	<key>FacebookDisplayName</key>
-	<string>APP-NAME</string>
-	<key>FacebookAutoLogAppEventsEnabled</key>
-	<true/>
-	<key>FacebookAdvertiserIDCollectionEnabled</key>
-	<true/>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-share-api</string>
-	</array>
 </dict>
 </plist>
