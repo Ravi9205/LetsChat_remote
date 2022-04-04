@@ -10,6 +10,6 @@ target 'LetsChat' do
   pod  'FirebaseAuth'
   pod  'FirebaseDatabase'
   pod 'FBSDKLoginKit'
-    
+  pod  'GoogleSignIn'  
 
 end

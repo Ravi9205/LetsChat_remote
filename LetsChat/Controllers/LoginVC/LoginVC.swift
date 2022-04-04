@@ -8,6 +8,8 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import GoogleSignIn
+import FirebaseCore
 
 class LoginVC: UIViewController {
     
@@ -45,8 +47,14 @@ class LoginVC: UIViewController {
     
     private let facebookloginButton : FBLoginButton = {
         let button = FBLoginButton()
-        button.permissions = ["email","public_profile"]
+        button.permissions = ["public_profile", "email"]
         return button
+    }()
+    
+    private let googleSignButton:GIDSignInButton = {
+        let button = GIDSignInButton()
+        return button
+        
     }()
     
     
@@ -101,12 +109,17 @@ class LoginVC: UIViewController {
         scrollView.addSubview(passwordField)
         scrollView.addSubview(loginButton)
         scrollView.addSubview(facebookloginButton)
+        scrollView.addSubview(googleSignButton)
+        
         
         emailField.delegate = self
         passwordField.delegate = self
         facebookloginButton.delegate = self
         
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        
+        googleSignButton.addTarget(self, action: #selector(googleSignTapped), for: .touchUpInside)
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -143,10 +156,15 @@ class LoginVC: UIViewController {
                                            width: scrollView.width-60,
                                            height: 52)
         
+        
         //facebookloginButton.center = scrollView.center
         facebookloginButton.frame.origin.y = loginButton.bottom + 20
         
-        
+        googleSignButton.frame = CGRect(x: 30,
+                                        y: facebookloginButton.bottom+20,
+                                        width: scrollView.width-60,
+                                        height: 52)
+        googleSignButton.frame.origin.y = facebookloginButton.bottom + 20
         
         
     }
@@ -197,6 +215,12 @@ class LoginVC: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
         
     }
+    
+    
+    @objc func googleSignTapped() {
+         googleSign()
+    }
+    
 }
 
 extension LoginVC:UITextFieldDelegate
@@ -269,8 +293,12 @@ extension LoginVC:LoginButtonDelegate{
                     return
                 }
                 print("Successfully logged user In===\(result)")
-                strongSelf.navigationController?.dismiss(animated: false, completion: nil)
+                //strongSelf.navigationController?.dismiss(animated: false, completion: nil)
                 
+                let tabbar = strongSelf.storyboard?.instantiateViewController(withIdentifier:"TabbarController")
+                let nav = UINavigationController(rootViewController: tabbar!)
+                nav.modalPresentationStyle = .fullScreen
+                strongSelf.present(nav, animated: false, completion: nil)
             }
         }
     }
@@ -278,4 +306,72 @@ extension LoginVC:LoginButtonDelegate{
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
         // no operation needed
     }
+    
+    
+}
+
+
+// MARK:- Google Sign
+
+extension LoginVC {
+    
+    private func googleSign() {
+        
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        // Create Google Sign In configuration object.
+        let config = GIDConfiguration(clientID: clientID)
+        
+        // Start the sign in flow!
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { [weak self] user, error in
+            
+            guard let strongSelf = self else {
+                return
+            }
+            
+            if let error = error {
+                // ...
+                print("Error while Google sign in \(error.localizedDescription)")
+                return
+            }
+            
+            guard let authentication = user?.authentication, let idToken = authentication.idToken else {
+                print("Missing the user Authentication with google")
+                return
+            }
+            
+            print("Signed in with Google=====\(String(describing: user))")
+            
+            guard let email = user?.profile?.email , let firstName = user?.profile?.givenName, let lastName = user?.profile?.familyName else {
+                return
+            }
+            
+            DatabaseManager.shared.userExits(with: email) { exits in
+                if !exits {
+                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                }
+            }
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                           accessToken: authentication.accessToken)
+            FirebaseAuth.Auth.auth().signIn(with:credential) { authResult, error in
+                
+                guard  authResult != nil, error == nil else {
+                    print("Error signin With Google using firebase")
+                    return
+                }
+                
+                print("Signed in successfully")
+                
+                let tabbar = strongSelf.storyboard?.instantiateViewController(withIdentifier:"TabbarController")
+                let nav = UINavigationController(rootViewController: tabbar!)
+                nav.modalPresentationStyle = .fullScreen
+                strongSelf.present(nav, animated: false, completion: nil)
+                
+            }
+        }
+        
+        
+    }
+    
 }
