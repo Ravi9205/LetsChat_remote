@@ -9,5 +9,7 @@ target 'LetsChat' do
   pod  'FirebaseCore'
   pod  'FirebaseAuth'
   pod  'FirebaseDatabase'
+  pod 'FBSDKLoginKit'
+    
 
 end
