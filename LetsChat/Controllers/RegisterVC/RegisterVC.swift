@@ -234,10 +234,36 @@ class RegisterVC: UIViewController {
                 
                 //let user = result.user
                 
-                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastNameField, emailAddress: email))
+                let chatAppUser = ChatAppUser(firstName: firstName, lastName: lastNameField, emailAddress: email)
+                
+                DatabaseManager.shared.insertUser(with: chatAppUser) { success in
+                    
+                    if success {
+                        // Upload Images to firebase store
+                        
+                        guard let image = strongSelf.imageView.image, let data = image.pngData() else {
+                            return
+                        }
+                         
+                        let filename =  chatAppUser.profilePictureFileName
+                        StorageManager.shared.uploadProfilePicture(with: data, fileName: filename) { result  in
+                            
+                            switch result {
+                            case .success(let downloadUrl):
+                                UserDefaults.standard.setValue(downloadUrl, forKey:"profile_picture_url")
+                                print(downloadUrl)
+                            case.failure( let error):
+                                print("Storaage manager error\(error)")
+                                
+                            }
+                        }
+                    }
+                }
                 // print("Created \(user)")
-                guard let message = strongSelf.storyboard?.instantiateViewController(withIdentifier:"MessageVC") as? MessageVC else { return}
-                strongSelf.navigationController?.pushViewController(message, animated: false)
+                let tabbar = strongSelf.storyboard?.instantiateViewController(withIdentifier:"TabbarController")
+                let nav = UINavigationController(rootViewController: tabbar!)
+                nav.modalPresentationStyle = .fullScreen
+                strongSelf.present(nav, animated: false, completion: nil)
                 
             }
         }

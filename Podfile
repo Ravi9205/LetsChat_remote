@@ -14,5 +14,7 @@ target 'LetsChat' do
   pod  'JGProgressHUD'
   pod  'RealmSwift'
   pod  'SDWebImage'
+  pod  'Firebase/Storage'
+
 
 end
