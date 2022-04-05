@@ -15,10 +15,17 @@ class ChatViewController:  MessagesViewController , MessagesDataSource , Message
     let otherUser = Sender(senderId:"other", displayName:" Jhone Smith")
     
     var  messages = [MessageType]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
+        
+        //MARK:- Adding navigation bar button item
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(rightBarButtonTapped))
+        
+        
+        
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -40,7 +47,7 @@ class ChatViewController:  MessagesViewController , MessagesDataSource , Message
     }
     
     // Message Kit delegates and data Sources Method
-
+    
     func currentSender() -> SenderType {
         return currentUser
     }
@@ -53,6 +60,12 @@ class ChatViewController:  MessagesViewController , MessagesDataSource , Message
         return messages.count
     }
     
-   
-
+    
+    @objc private func rightBarButtonTapped(){
+        let vc = NewConversessionVC()
+        let nav = UINavigationController(rootViewController: vc)
+        vc.title = "New Conversession"
+        self.present(nav, animated: false, completion: nil)
+    }
+    
 }
