@@ -11,5 +11,8 @@ target 'LetsChat' do
   pod  'FirebaseDatabase'
   pod 'FBSDKLoginKit'
   pod  'GoogleSignIn'  
+  pod  'JGProgressHUD'
+  pod  'RealmSwift'
+  pod  'SDWebImage'
 
 end

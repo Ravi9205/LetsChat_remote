@@ -10,8 +10,12 @@ import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
 import FirebaseCore
+import JGProgressHUD
 
 class LoginVC: UIViewController {
+    
+    private let spinner = JGProgressHUD(style: .dark)
+    
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -181,9 +185,16 @@ class LoginVC: UIViewController {
         }
         
         // Firebase login
+        spinner.show(in: view)
+        
         FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             guard let strongSelf = self else {
                 return
+            }
+            
+            DispatchQueue.main.async {
+                strongSelf.spinner.dismiss()
+
             }
             
             guard let result = authResult, error == nil else {
@@ -218,7 +229,7 @@ class LoginVC: UIViewController {
     
     
     @objc func googleSignTapped() {
-         googleSign()
+        googleSign()
     }
     
 }
@@ -255,6 +266,7 @@ extension LoginVC:LoginButtonDelegate{
             
             guard let  result = result as? [String:Any] , error == nil else {
                 print("error fetching facebook Data")
+                
                 return
             }
             print("\(result)")
@@ -289,7 +301,11 @@ extension LoginVC:LoginButtonDelegate{
                 }
                 
                 guard let result = authResult, error == nil else {
-                    print("error while signing with facebook account")
+                    
+                    if let error = error {
+                        strongSelf.alertUserLoginError(message:error.localizedDescription)
+                        
+                    }
                     return
                 }
                 print("Successfully logged user In===\(result)")
@@ -331,7 +347,7 @@ extension LoginVC {
             
             if let error = error {
                 // ...
-                print("Error while Google sign in \(error.localizedDescription)")
+                strongSelf.alertUserLoginError(message:error.localizedDescription)
                 return
             }
             
@@ -357,7 +373,11 @@ extension LoginVC {
             FirebaseAuth.Auth.auth().signIn(with:credential) { authResult, error in
                 
                 guard  authResult != nil, error == nil else {
-                    print("Error signin With Google using firebase")
+                    // print("Error signin With Google using firebase")
+                    if let error = error {
+                        strongSelf.alertUserLoginError(message:error.localizedDescription)
+                        
+                    }
                     return
                 }
                 

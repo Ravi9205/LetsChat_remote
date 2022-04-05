@@ -7,8 +7,13 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 class RegisterVC: UIViewController {
+    
+    
+    private let spinner = JGProgressHUD(style: .dark)
+
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -199,6 +204,8 @@ class RegisterVC: UIViewController {
         }
         
         // Firebase login
+        spinner.show(in: view)
+
         
         DatabaseManager.shared.userExits(with: email) {[weak self] emailExits in
             
@@ -210,7 +217,14 @@ class RegisterVC: UIViewController {
                 //user Already exits
                 return
             }
+            
+            
             FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+                
+                DispatchQueue.main.async {
+                    strongSelf.spinner.dismiss()
+
+                }
                 
                 guard  authResult != nil, error == nil else {
                     //print("error creating new account\(String(describing: error))")

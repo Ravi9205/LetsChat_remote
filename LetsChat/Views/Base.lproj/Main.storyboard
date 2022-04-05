@@ -119,6 +119,21 @@
             </objects>
             <point key="canvasLocation" x="-364" y="876"/>
         </scene>
+        <!--New ConversessionVC-->
+        <scene sceneID="qyL-Vg-VDv">
+            <objects>
+                <viewController storyboardIdentifier="NewConversessionVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nkX-DL-zUW" customClass="NewConversessionVC" customModule="LetsChat" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KAb-5T-7SF">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="PDd-7U-Dc9"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gVc-GD-LEh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1403" y="856"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Yrt-Dn-JbV">
             <objects>

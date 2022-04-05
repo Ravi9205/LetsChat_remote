@@ -7,12 +7,14 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 class MessageVC: UIViewController {
     
     @IBOutlet weak var tablView:UITableView!
     
     
+    private let spinnner = JGProgressHUD(style: .dark)
     
     override func viewDidLoad() {
         super.viewDidLoad()
