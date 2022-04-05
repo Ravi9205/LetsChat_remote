@@ -194,7 +194,7 @@ class LoginVC: UIViewController {
             
             DispatchQueue.main.async {
                 strongSelf.spinner.dismiss()
-
+                
             }
             
             guard let result = authResult, error == nil else {
@@ -221,7 +221,7 @@ class LoginVC: UIViewController {
     
     
     @objc func registerTapped(){
-        let vc = RegisterVC()
+        let vc = self.storyboard?.instantiateViewController(withIdentifier:"RegisterVC") as! RegisterVC
         vc.title = "Create Account"
         navigationController?.pushViewController(vc, animated: true)
         
@@ -260,7 +260,7 @@ extension LoginVC:LoginButtonDelegate{
         }
         
         
-        let facebookRquest = FBSDKLoginKit.GraphRequest(graphPath:"me", parameters: ["fields":"email,name"], tokenString: token, version: nil, httpMethod: .get)
+        let facebookRquest = FBSDKLoginKit.GraphRequest(graphPath:"me", parameters: ["fields":"email,first_name,last_name,picture.type(large)"], tokenString: token, version: nil, httpMethod: .get)
         
         facebookRquest.start { _, result, error in
             
@@ -271,23 +271,50 @@ extension LoginVC:LoginButtonDelegate{
             }
             print("\(result)")
             
-            guard let facebookName = result["name"] as? String, let facebookEmail = result["email"] as? String else {
+            guard let firstName = result["first_name"] as? String, let lastName = result["last_name"] as? String, let facebookEmail = result["email"] as? String, let picture = result["picture"] as? [String:Any], let imgData = picture["data"] as? [String:Any],let pictureURL = imgData["url"] as? String  else {
                 print("Failed to get email and first & last name from facebook")
                 return
             }
             
-            let nameCompents = facebookName.components(separatedBy: " ")
-            guard nameCompents.count == 2 else {
-                return
-            }
             
-            let firstName = nameCompents[0]
-            let lastName = nameCompents[1]
             
             DatabaseManager.shared.userExits(with: facebookEmail) { exits in
                 
                 if !exits {
-                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: facebookEmail))
+                    let chatUser = ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: facebookEmail)
+                    DatabaseManager.shared.insertUser(with:chatUser) {  success in
+                        if success {
+                            //Insert into data base
+                            
+                            guard let url = URL(string: pictureURL) else {
+                                return
+                            }
+                            
+                            URLSession.shared.dataTask(with: url) { downloadedImgData, dataResponse, error in
+                                
+                                
+                                guard let data = downloadedImgData else {
+                                    print("Error while fetching image data from facebook")
+                                    return
+                                }
+                                
+                                
+                                let filename =  chatUser.profilePictureFileName
+                                StorageManager.shared.uploadProfilePicture(with: data, fileName: filename) { result  in
+                                    
+                                    switch result {
+                                    case .success(let downloadUrl):
+                                        UserDefaults.standard.setValue(downloadUrl, forKey:"profile_picture_url")
+                                        print(downloadUrl)
+                                    case.failure( let error):
+                                        print("Storaage manager error\(error)")
+                                        
+                                    }
+                                }
+                                
+                            }.resume()
+                        }
+                    }
                 }
                 
             }
@@ -364,34 +391,69 @@ extension LoginVC {
             
             DatabaseManager.shared.userExits(with: email) { exits in
                 if !exits {
-                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
-                }
-            }
-            
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                           accessToken: authentication.accessToken)
-            FirebaseAuth.Auth.auth().signIn(with:credential) { authResult, error in
-                
-                guard  authResult != nil, error == nil else {
-                    // print("Error signin With Google using firebase")
-                    if let error = error {
-                        strongSelf.alertUserLoginError(message:error.localizedDescription)
-                        
+                    
+                    let chatAppUser = ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email)
+                    DatabaseManager.shared.insertUser(with: chatAppUser) { success in
+                        if success {
+                            // Upload Images to firebase store
+                            
+                            if ((user?.profile?.hasImage) != nil) {
+                                
+                                guard let url = user?.profile?.imageURL(withDimension:200) else {
+                                    return
+                                }
+                                
+                                URLSession.shared.dataTask(with: url) { downloadedImgData, dataResponse, error in
+                                    
+                                    
+                                    guard let data = downloadedImgData else {
+                                        print("Error while fetching image data from facebook")
+                                        return
+                                    }
+                                    
+                                    
+                                    let filename =  chatAppUser.profilePictureFileName
+                                    StorageManager.shared.uploadProfilePicture(with: data, fileName: filename) { result  in
+                                        
+                                        switch result {
+                                        case .success(let downloadUrl):
+                                            UserDefaults.standard.setValue(downloadUrl, forKey:"profile_picture_url")
+                                            print(downloadUrl)
+                                        case.failure( let error):
+                                            print("Storaage manager error\(error)")
+                                            
+                                        }
+                                    }
+                                }.resume()
+                                
+                            }
+                        }
                     }
-                    return
                 }
                 
-                print("Signed in successfully")
-                
-                let tabbar = strongSelf.storyboard?.instantiateViewController(withIdentifier:"TabbarController")
-                let nav = UINavigationController(rootViewController: tabbar!)
-                nav.modalPresentationStyle = .fullScreen
-                strongSelf.present(nav, animated: false, completion: nil)
-                
+                let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                               accessToken: authentication.accessToken)
+                FirebaseAuth.Auth.auth().signIn(with:credential) { authResult, error in
+                    
+                    guard  authResult != nil, error == nil else {
+                        // print("Error signin With Google using firebase")
+                        if let error = error {
+                            strongSelf.alertUserLoginError(message:error.localizedDescription)
+                            
+                        }
+                        return
+                    }
+                    
+                    print("Signed in successfully")
+                    
+                    let tabbar = strongSelf.storyboard?.instantiateViewController(withIdentifier:"TabbarController")
+                    let nav = UINavigationController(rootViewController: tabbar!)
+                    nav.modalPresentationStyle = .fullScreen
+                    strongSelf.present(nav, animated: false, completion: nil)
+                    
+                }
             }
         }
         
-        
     }
-    
 }
