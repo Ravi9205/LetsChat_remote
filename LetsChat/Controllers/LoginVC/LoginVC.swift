@@ -173,6 +173,7 @@ class LoginVC: UIViewController {
         
     }
     
+    // MARK:- Normal Sign In Usign Email and password
     
     @objc func loginButtonTapped() {
         
@@ -204,6 +205,9 @@ class LoginVC: UIViewController {
             
             let user = result.user
             print("userInfo==\(user)")
+            
+            UserDefaults.standard.setValue(email, forKey:"email")
+            
             let tabbar = strongSelf.storyboard?.instantiateViewController(withIdentifier:"TabbarController")
             let nav = UINavigationController(rootViewController: tabbar!)
             nav.modalPresentationStyle = .fullScreen
@@ -276,7 +280,8 @@ extension LoginVC:LoginButtonDelegate{
                 return
             }
             
-            
+            UserDefaults.standard.setValue(facebookEmail, forKey:"email")
+
             
             DatabaseManager.shared.userExits(with: facebookEmail) { exits in
                 
@@ -388,6 +393,8 @@ extension LoginVC {
             guard let email = user?.profile?.email , let firstName = user?.profile?.givenName, let lastName = user?.profile?.familyName else {
                 return
             }
+            
+            UserDefaults.standard.setValue(email, forKey:"email")
             
             DatabaseManager.shared.userExits(with: email) { exits in
                 if !exits {
