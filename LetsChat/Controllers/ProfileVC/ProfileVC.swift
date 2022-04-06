@@ -9,6 +9,7 @@ import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
+import SwiftUI
 
 class ProfileVC: UIViewController {
     
@@ -27,8 +28,6 @@ class ProfileVC: UIViewController {
         
     }
     
-    
-    
 }
 
 extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
@@ -46,8 +45,65 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
         return cell
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: 300))
+        headerView.backgroundColor = .link
+        
+        guard let email = UserDefaults.standard.value(forKey:"email") as? String else{
+            return nil
+        }
+        
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+        let fileName = safeEmail + "_profile_picture.png"
+        let path = "images/" + fileName
+        print(path)
+        let imageView = UIImageView(frame: CGRect(x: (headerView.width-150)/2, y: 75, width: 150.0, height: 150))
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.layer.borderWidth = 2
+        imageView.layer.cornerRadius = imageView.width/2
+        imageView.layer.masksToBounds = true
+        headerView.addSubview(imageView)
+        
+        StorageManager.shared.downloadURL(path: path) {[weak self] result in
+            switch result {
+            case .success(let url):
+                self?.downLoadImage(imageView: imageView, url: url)
+            case.failure(let error):
+                print("Failed to get download URL====\(error.localizedDescription)")
+            }
+        }
+        
+        return headerView
+        
+    }
+    
+    func downLoadImage(imageView:UIImageView, url:URL)
+    {
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            
+            guard let data = data , error == nil else {
+                if  let error = error {
+                    print("Error downloading image from URL\(error.localizedDescription)")
+                }
+                return
+            }
+           
+            DispatchQueue.main.async {
+                let image  =  UIImage(data:data)
+                imageView.image = image
+                
+            }
+        }.resume()
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 55.0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 300.0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
