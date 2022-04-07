@@ -43,6 +43,25 @@ extension DatabaseManager {
         }
     }
     
+    //MARK:- FUunction to fetch all Users
+    
+    public func fetchAllUsers(completion: @escaping(Result<[[String:String]],Error>)->Void){
+        
+        database.child("users").observeSingleEvent(of: .value) { dataSnapShot in
+            
+            guard let value = dataSnapShot.value as? [[String:String]] else {
+                completion(.failure(DatabaseErrors.failedToFetchUsers))
+                return
+            }
+            completion(.success(value))
+        }
+        
+    }
+    
+    //MARK:- Database error 
+    public enum DatabaseErrors:Error {
+        case failedToFetchUsers
+    }
     
     
     //MARK:- Insert into dataBase
@@ -119,3 +138,4 @@ struct ChatAppUser{
     }
     
 }
+
