@@ -19,13 +19,6 @@ class ChatViewController:  MessagesViewController , MessagesDataSource , Message
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
-        //MARK:- Adding navigation bar button item
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(rightBarButtonTapped))
-        
-        
-        
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -61,11 +54,5 @@ class ChatViewController:  MessagesViewController , MessagesDataSource , Message
     }
     
     
-    @objc private func rightBarButtonTapped(){
-        let vc = NewConversessionVC()
-        let nav = UINavigationController(rootViewController: vc)
-        vc.title = "New Conversession"
-        self.present(nav, animated: false, completion: nil)
-    }
     
 }

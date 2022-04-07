@@ -26,7 +26,8 @@ class MessageVC: UIViewController {
         self.tablView.dataSource = self
         self.navigationItem.setHidesBackButton(true, animated: true)
 
-        
+        //MARK:- Adding navigation bar button item
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(rightBarButtonTapped))
         
     }
     
@@ -36,6 +37,24 @@ class MessageVC: UIViewController {
 
     }
     
+    @objc private func rightBarButtonTapped(){
+        let vc = NewConversessionVC()
+        let nav = UINavigationController(rootViewController: vc)
+        vc.title = "New Conversession"
+        vc.completion = {[weak self] result in
+            print(result)
+            self?.createNewConversation(result: result)
+        }
+        self.present(nav, animated: false, completion: nil)
+    }
+    
+    
+    private func createNewConversation(result:[String:String]){
+        
+        let chat = ChatViewController()
+        chat.title = "Chat"
+        self.navigationController?.pushViewController(chat, animated: true)
+    }
     
 }
 
