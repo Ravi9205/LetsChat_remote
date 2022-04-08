@@ -19,6 +19,9 @@
 		B30764B227E9E191004F8742 /* LetsChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30764B127E9E191004F8742 /* LetsChatTests.swift */; };
 		B30764BC27E9E191004F8742 /* LetsChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30764BB27E9E191004F8742 /* LetsChatUITests.swift */; };
 		B30764BE27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30764BD27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift */; };
+		B36D100028003F08002B2511 /* ConversationTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0FFF28003F08002B2511 /* ConversationTableCell.swift */; };
+		B36D1002280044C1002B2511 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D1001280044C1002B2511 /* Conversation.swift */; };
+		B36D100428004544002B2511 /* LatestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D100328004544002B2511 /* LatestMessage.swift */; };
 		B36D83D627F71B520052C3DD /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D83D527F71B520052C3DD /* ProfileVC.swift */; };
 		B36E024D27FC195000C36517 /* NewConversessionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36E024C27FC195000C36517 /* NewConversessionVC.swift */; };
 		B36E024F27FC3C8F00C36517 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36E024E27FC3C8F00C36517 /* StorageManager.swift */; };
@@ -65,6 +68,9 @@
 		B30764B727E9E191004F8742 /* LetsChatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LetsChatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B30764BB27E9E191004F8742 /* LetsChatUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetsChatUITests.swift; sourceTree = "<group>"; };
 		B30764BD27E9E191004F8742 /* LetsChatUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetsChatUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B36D0FFF28003F08002B2511 /* ConversationTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableCell.swift; sourceTree = "<group>"; };
+		B36D1001280044C1002B2511 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		B36D100328004544002B2511 /* LatestMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestMessage.swift; sourceTree = "<group>"; };
 		B36D83D527F71B520052C3DD /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		B36E024C27FC195000C36517 /* NewConversessionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversessionVC.swift; sourceTree = "<group>"; };
 		B36E024E27FC3C8F00C36517 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -141,6 +147,8 @@
 			children = (
 				B301D5C827E9EAEC00BBE3E1 /* Sender.swift */,
 				B301D5CA27E9EB4E00BBE3E1 /* Message.swift */,
+				B36D1001280044C1002B2511 /* Conversation.swift */,
+				B36D100328004544002B2511 /* LatestMessage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -200,6 +208,14 @@
 			path = LetsChatUITests;
 			sourceTree = "<group>";
 		};
+		B36D0FFE28003E73002B2511 /* CustomCell */ = {
+			isa = PBXGroup;
+			children = (
+				B36D0FFF28003F08002B2511 /* ConversationTableCell.swift */,
+			);
+			path = CustomCell;
+			sourceTree = "<group>";
+		};
 		B36D83D427F71B3A0052C3DD /* ProfileVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -226,6 +242,7 @@
 		B38305AF27EB240800D569EF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B36D0FFE28003E73002B2511 /* CustomCell */,
 				B30764A027E9E18A004F8742 /* Main.storyboard */,
 				B30764A327E9E191004F8742 /* Assets.xcassets */,
 				B30764A527E9E191004F8742 /* LaunchScreen.storyboard */,
@@ -464,9 +481,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B36D100428004544002B2511 /* LatestMessage.swift in Sources */,
 				B307649B27E9E18A004F8742 /* AppDelegate.swift in Sources */,
 				B38305BA27EB9C9400D569EF /* Extensions.swift in Sources */,
 				B389245027F2F1AB00B6B889 /* DatabaseManager.swift in Sources */,
+				B36D1002280044C1002B2511 /* Conversation.swift in Sources */,
 				B38305B727EB265800D569EF /* RegisterVC.swift in Sources */,
 				B301D5C327E9E72200BBE3E1 /* MessageVC.swift in Sources */,
 				B38305B427EB262C00D569EF /* LoginVC.swift in Sources */,
@@ -477,6 +496,7 @@
 				B36D83D627F71B520052C3DD /* ProfileVC.swift in Sources */,
 				B301D5C927E9EAEC00BBE3E1 /* Sender.swift in Sources */,
 				B36E024F27FC3C8F00C36517 /* StorageManager.swift in Sources */,
+				B36D100028003F08002B2511 /* ConversationTableCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
