@@ -233,7 +233,8 @@ class RegisterVC: UIViewController {
                 }
                 
                 //let user = result.user
-                
+                UserDefaults.standard.setValue(email, forKey:"email")
+
                 let chatAppUser = ChatAppUser(firstName: firstName, lastName: lastNameField, emailAddress: email)
                 
                 DatabaseManager.shared.insertUser(with: chatAppUser) { success in

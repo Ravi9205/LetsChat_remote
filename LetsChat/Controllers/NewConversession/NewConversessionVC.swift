@@ -10,6 +10,10 @@ import JGProgressHUD
 import SwiftUI
 
 class NewConversessionVC: UIViewController {
+    
+    
+    public var completion:(([String:String])->(Void))?
+    
     private var spinner = JGProgressHUD(style: .dark)
     
     private var users = [[String:String]]()
@@ -163,6 +167,11 @@ extension NewConversessionVC:UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let userData = results[indexPath.row]
+        self.dismiss(animated: true) {[weak self] in
+            self?.completion?(userData)
+        }
         
     }
     

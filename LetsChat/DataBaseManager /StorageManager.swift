@@ -53,13 +53,12 @@ final class StorageManager {
     //MARK: - Function to get downloaded URL from Download manager
     public func downloadURL(path: String,  completion : @escaping  (Result<URL,Error>) -> Void) {
         
-        let refrence = storage.reference().child(path)
+        let refrence = storage.reference().child("\(path)")
         refrence.downloadURL { url, error in
             guard let url = url, error == nil else {
                 completion(.failure(StorageErrors.failedToGetDownloadUrl))
                 return
-                
-            }
+        }
             completion(.success(url))
         }
         
