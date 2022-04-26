@@ -55,7 +55,7 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
         }
         
         let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
-        let fileName = safeEmail + "_profile_picture.png"
+        let fileName = safeEmail + "_profile_picture_png"
         let path = "images/" + fileName
         print(path)
         let imageView = UIImageView(frame: CGRect(x: (headerView.width-150)/2, y: 75, width: 150.0, height: 150))

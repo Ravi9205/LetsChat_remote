@@ -32,6 +32,8 @@ class LoginVC: UIViewController {
         
     }()
     
+    private var loginObserver: NSObjectProtocol?
+
     
     private let emailField:UITextField = {
         let textField = UITextField()
@@ -120,10 +122,25 @@ class LoginVC: UIViewController {
         passwordField.delegate = self
         facebookloginButton.delegate = self
         
+        loginObserver = NotificationCenter.default.addObserver(forName: .didLogInNotification, object: nil, queue: .main, using: { [weak self] _ in
+            guard let strongSelf = self else {
+                return
+            }
+
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+        })
+        
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         
         googleSignButton.addTarget(self, action: #selector(googleSignTapped), for: .touchUpInside)
         
+    }
+    
+    //MARK:- Removing the observer once deinit called
+    deinit {
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -206,8 +223,21 @@ class LoginVC: UIViewController {
             let user = result.user
             print("userInfo==\(user)")
             
+            let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+            DatabaseManager.shared.getDataFor(path:"\(safeEmail)") { result in
+                switch result {
+                    case .success(let data):
+                    guard let userData = data as? [String:Any] ,let firstName = userData["first_name"] as? String, let lastName = userData["last_name"] as? String else {
+                        return
+                    }
+                    
+                    //MARK:- Fetching user name from the Database
+                    UserDefaults.standard.setValue("\(firstName) \(lastName)", forKey:"name")
+                case .failure(let error):
+                    print("Failed to get data from Database \(error)")
+                }
+            }
             UserDefaults.standard.setValue(email, forKey:"email")
-            
             let tabbar = strongSelf.storyboard?.instantiateViewController(withIdentifier:"TabbarController")
             let nav = UINavigationController(rootViewController: tabbar!)
             nav.modalPresentationStyle = .fullScreen
@@ -281,6 +311,7 @@ extension LoginVC:LoginButtonDelegate{
             }
             
             UserDefaults.standard.setValue(facebookEmail, forKey:"email")
+            UserDefaults.standard.setValue("\(firstName) \(lastName)", forKey:"name")
 
             
             DatabaseManager.shared.userExits(with: facebookEmail) { exits in
@@ -395,6 +426,8 @@ extension LoginVC {
             }
             
             UserDefaults.standard.setValue(email, forKey:"email")
+            UserDefaults.standard.setValue("\(firstName) \(lastName)", forKey:"name")
+
             
             DatabaseManager.shared.userExits(with: email) { exits in
                 if !exits {
