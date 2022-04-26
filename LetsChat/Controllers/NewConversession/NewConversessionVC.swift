@@ -12,12 +12,12 @@ import SwiftUI
 class NewConversessionVC: UIViewController {
     
     
-    public var completion:(([String:String])->(Void))?
+    public var completion:((SearchResult)->(Void))?
     
     private var spinner = JGProgressHUD(style: .dark)
     
-    private var users = [[String:String]]()
-    private var results = [[String:String]]()
+    private var users = [[String: String]]()
+    private var results = [SearchResult]()
     private var isUserFetched = false
     private var  searchBar : UISearchBar = {
         let searchBar = UISearchBar()
@@ -97,41 +97,59 @@ extension NewConversessionVC:UISearchBarDelegate{
     
     
     
-    func searchUsers(query:String){
-        // Check Array has firebase results
+    func searchUsers(query: String) {
+        // check if array has firebase results
         if isUserFetched {
+            // if it does: filter
             filterUsers(with: query)
         }
         else {
-            DatabaseManager.shared.fetchAllUsers {[weak self] result in
-                
+            // if not, fetch then filter
+            DatabaseManager.shared.fetchAllUsers(completion: { [weak self] result in
                 switch result {
-                case.success(let userCollection):
+                case .success(let usersCollection):
                     self?.isUserFetched = true
-                    self?.users = userCollection
+                    self?.users = usersCollection
                     self?.filterUsers(with: query)
-                case.failure(let error):
-                    print("Error occuered while fetching users list\(error)")
+                case .failure(let error):
+                    print("Failed to get usres: \(error)")
                 }
-            }
+            })
         }
-        
     }
     
-    func filterUsers(with terms:String){
-        guard isUserFetched else {
+    func filterUsers(with term: String) {
+        // update the UI: eitehr show results or show no results label
+        guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String, isUserFetched else {
             return
         }
+        
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: currentUserEmail)
+        
         self.spinner.dismiss()
         
-        let results:[[String:String]] = self.users.filter({
-            guard let name =   $0["name"]?.lowercased() else {
+        let results: [SearchResult] = users.filter({
+            guard let email = $0["email"], email != safeEmail else {
                 return false
             }
             
-            return name.hasPrefix(terms.lowercased())
+            guard let name = $0["name"]?.lowercased() else {
+                return false
+            }
+            
+            return name.hasPrefix(term.lowercased())
+        }).compactMap({
+            
+            guard let email = $0["email"],
+                  let name = $0["name"] else {
+                      return nil
+                  }
+            
+            return SearchResult(name: name, email: email)
         })
+        
         self.results = results
+        
         updateUI()
     }
     
@@ -161,7 +179,7 @@ extension NewConversessionVC:UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier:"cell", for: indexPath)
-        cell.textLabel?.text = results[indexPath.row]["name"]
+        cell.textLabel?.text = results[indexPath.row].name
         return cell
     }
     
